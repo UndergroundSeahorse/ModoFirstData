@@ -1,0 +1,6 @@
+framework module ModoKit {
+  umbrella header "ModoKit.h"
+
+  export *
+  module * { export * }
+}

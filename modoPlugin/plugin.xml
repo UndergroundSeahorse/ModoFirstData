@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="com.modo.modokit" version="1.0.0">
+    <engines>
+        <engine name="apple-ios" version=">=8.0" />
+    </engines>
+    <name>ModoPlugin</name>
+    <description>Modo API interfaces for card entry/encryption and authentication</description>
+    <license>Copyright 2015 ModoPayments, LLC</license>
+    <keywords>cordova,device</keywords>
+    <js-module src="www/modo.js" name="modo">
+        <clobbers target="plugins.ModoPlugin" />
+    </js-module>
+    <js-module src="www/modoBeacon.js" name="modoBeacon">
+        <clobbers target="plugins.ModoBeaconPlugin" />
+    </js-module>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="ModoPlugin">
+                <param name="ios-package" value="ModoPlugin" />
+            </feature>
+            <feature name="ModoBeaconPlugin">
+                <param name="ios-package" value="ModoBeaconPlugin" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/ModoBeaconPlugin.h" />
+        <source-file src="src/ios/ModoBeaconPlugin.m" />
+        <header-file src="src/ios/ModoPlugin.h" />
+        <source-file src="src/ios/ModoPlugin.m" />
+        <source-file src="www/modo.js" />
+        <source-file src="www/modoBeacon.js" />
+        <framework src="src/ios/ModoKit.framework" custom="true" />
+        <framework src="CoreLocation" />
+    </platform>
+    <info>
+        You'll need to remove ModoKit.framework (remove references, don't delete), and add it to the target as an embedded binary:
+        project settings -> General -> Embedded Binaries
+
+        In order to use ModoBeaconPlugin, uou'll also need to add the following keys to your target under Info -> "Custom iOS Target Properties":
+        NSLocationAlwaysUsageDescription This application monitors your location to [REASON].
+        NSLocationWhenInUseUsageDescription This application uses your location to [REASON].
+
+        Do NOT submit to the app store with a plugin that works on the simulator!!!
+    </info>
+</plugin>
+
+<!-- Cordova will probably not add ModoPlugin.m to your target correctly.
+     It also has no idea what to do with the custom framework. Delete it from the project (remove references), and go to your project settings -> General -> Embedded Binaries, and add it there. Now it should work!
+     Do NOT submit to the app store with a plugin that works on the simulator!!!
+     Do NOT submit to the app store with an x86 compatible plugin! They will reject you! -->
