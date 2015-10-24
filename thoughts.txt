@@ -1,0 +1,8 @@
+-Imagine this restaurant experience
+  -walk into a restaurant, and sit down
+  -order and enjoy your food
+  -when you are done, get up and leave
+    -no tips, no cards, no waiting for the reciept
+
+-Changing the restaurant experience
+-allowing restaurants to focus on customer experience, no payments
