@@ -31,55 +31,80 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   // Each state's controller can be found in controllers.js
   $stateProvider
 
-  // setup an abstract state for the tabs directive
-    .state('tab', {
-    url: '/tab',
-    abstract: true,
-    templateUrl: 'templates/tabs.html'
+  .state('splash', {
+    url: '/splash',
+    templateUrl: 'templates/splash.html'
   })
 
-  // Each tab has its own nav history stack:
+  // setup an abstract state for the tabs directive
+  .state('customer', {
+    url: '/customer',
+    abstract: true,
+    templateUrl: 'templates/customer.html'
+  })
 
-  .state('tab.dash', {
-    url: '/dash',
+  // setup an abstract state for the tabs directive
+  .state('customer.home', {
+    url: '/home',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      'customer-home': {
+        templateUrl: 'templates/customer-home.html'
       }
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
+  .state('customer.payments', {
+    url: '/payments',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'customer-payments': {
+        templateUrl: 'templates/customer-payments.html'
+      }
+    }
+  })
+
+  .state('restaurant', {
+    url: '/restaurant',
+    abstract: true,
+    templateUrl: 'templates/restaurant.html'
+  })
+
+  .state('restaurant.home', {
+    url: '/home',
+    views: {
+      'restaurant-home': {
+        templateUrl: 'templates/restaurant-home.html'
+      }
+    }
+  })
+
+  .state('restaurant.payments', {
+    url: '/payments',
+    views: {
+      'restaurant-payments': {
+        templateUrl: 'templates/restaurant-payments.html'
+      }
+    }
+  })
+
+  .state('restaurant.customers', {
+    url: '/customers',
+    views: {
+      'restaurant-customers': {
+        templateUrl: 'templates/restaurant-customers.html'
+      }
+    }
+  })
+
+  .state('restaurant.customer-detail', {
+    url: '/customers/:customerId',
+    views: {
+      'restaurant-customer': {
+        templateUrl: 'templates/customer-detail.html'
       }
     }
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/splash');
 
 });
