@@ -1,0 +1,5 @@
+* Cordova will probably not add ModoPlugin.m to your target correctly.
+* It also has no idea what to do with the custom framework. Delete it from the project (remove references), and go to your project settings -> General -> Embedded Binaries, and add it there. Now it should work!
+* Do NOT submit to the app store with a plugin that works on the simulator!!!
+* Do NOT submit to the app store with an x86 compatible plugin! They will reject you!
+* Use ModoKit_AppStore.framework when submitting to the app store
