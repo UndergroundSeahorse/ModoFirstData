@@ -238,3 +238,11 @@ html {
   margin-top: 10px;
   margin-right: 20px;
 }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  border: 1px solid black;
+  background-color: rgba(90, 167, 183, 0.2);
+}

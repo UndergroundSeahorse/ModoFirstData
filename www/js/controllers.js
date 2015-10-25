@@ -119,7 +119,7 @@ angular.module('starter.controllers', [])
     setTimeout(function(){
       $state.go('restaurant.home');
       $scope.hide();
-    },1000);
+    },2000);
 
     // put on server
     // gateway.transaction.sale({
