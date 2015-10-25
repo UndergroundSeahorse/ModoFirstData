@@ -26,6 +26,7 @@
       <div ng-if="item.checked === true">
         <label class="item">
           <p class="current--item__name">{{item.name}}</p>
+          <p class="quantity">Quantity: </p>
           <input type="number" ng-model="item.num" class="current--item__num" ng-change="changeTotal();">
           <p class="current--item__total">${{item.num * item.price}}</p>
         </label>

@@ -2,7 +2,7 @@
   <ion-content class="padding">
       <!-- <braintree-paypal></braintree-paypal> -->
 
-      <form id="checkout" ng-submit="createCC();" method="post">
+      <form id="checkout--form" ng-submit="createCC();" method="post">
         <input data-braintree-name="number" placeholder="4111111111111111" ng-model="creditCard.number">
         <input data-braintree-name="cvv" placeholder="cvv:100" ng-model="creditCard.cvv">
 
