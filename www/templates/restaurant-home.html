@@ -1,5 +1,9 @@
 <ion-view view-title="Home">
   <ion-content class="padding">
-    <h1>Restaurant Home</h1>
+    <div ng-repeat="customer in customers" ui-sref="customerdetail({customerId: customer.uid})">
+      <div class="item">
+        <p class="item--grid__name">{{customer.name}}<span class="ion-chevron-right left--arrow"></span></p>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

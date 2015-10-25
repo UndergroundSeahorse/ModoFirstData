@@ -1,21 +1,17 @@
-<ion-view view-title="No Pay">
+<ion-view view-title="Home" id="splash">
   <ion-content class="padding">
-    <p>This is the splash page for the entire app. User has the choice to choose customer or restaurant.</p>
+
+    <h1 id="splash--h1">No Pay</h1>
 
     <label class="item item-input">
-      <span class="input-label">Email</span>
-      <input type="email" ng-model="userInfo.email" placeholder="email">
+      <input type="email" ng-model="userInfo.email" placeholder="enter email">
     </label>
 
     <label class="item item-input">
-      <span class="input-label">Password</span>
-      <input type="password" ng-model="userInfo.password" placeholder="password">
+      <input type="password" ng-model="userInfo.password" placeholder="enter password">
     </label>
 
-
-
-
-    <div class="list">
+    <div class="list" id="register--type">
       <label class="item item-radio">
         <input type="radio" name="register__type" ng-click="buttonChoiceCu();" value="customer">
         <div class="item-content">
@@ -32,7 +28,7 @@
       </label>
     </div>
 
-    <button class="button-positive" ng-click="signIn();">Next</button>
+    <button class="splash--next" ng-click="signIn();">Next</button>
 
     <div class="list" style="text-align:center">
       <button ng-click="modal.show()" class="button button-small button-outline icon-left ion-person-add button-positive" id="create--user">

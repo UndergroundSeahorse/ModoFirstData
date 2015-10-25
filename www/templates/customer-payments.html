@@ -1,6 +1,24 @@
 <ion-view view-title="Payments">
   <ion-content class="padding">
-    <h1>Customer Payments</h1>
+    <div>
+      <braintree-paypal></braintree-paypal>
 
+      <input
+        ng-model="creditCard.number"
+        placeholder="4111111111111111"
+        />
+
+      <input
+        ng-model="creditCard.expirationDate"
+        placeholder="10/18"
+        />
+
+      <input
+        type="submit"
+        value="Enter Card"
+        ng-click="createCC()"
+        />
+
+    </div>
   </ion-content>
 </ion-view>

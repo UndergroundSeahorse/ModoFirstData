@@ -4,11 +4,36 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view view-title="{{customer.name}}">
+<ion-view view-title="{{name}}">
   <ion-content class="padding">
-    <img ng-src="{{customer.face}}" style="width: 64px; height: 64px">
-    <p>
-      This is the customer detail page
-    </p>
+    <h1 ng-click="myGoBack()" class="ion-ios-home home--resize"></h1>
+    <!-- <div ng-repeat="item in restaurant.menu" class="item"> -->
+
+    <div ng-repeat="item in restaurant.menu">
+      <label class="item item-radio">
+        <input type="checkbox" ng-model="item.checked" ng-change="changeTotal();">
+        <div class="item-content">
+          <p class="customer--grid__name">{{item.name}}</p>
+          <p class="customer--grid__price">${{item.price}}</p>
+        </div>
+        <i class="radio-icon ion-checkmark"></i>
+      </label>
+    </div>
+
+    <h1 id="customer--items">Current Items</h1>
+
+    <div ng-repeat="item in restaurant.menu">
+      <div ng-if="item.checked === true">
+        <label class="item">
+          <p class="current--item__name">{{item.name}}</p>
+          <input type="number" ng-model="item.num" class="current--item__num" ng-change="changeTotal();">
+          <p class="current--item__total">${{item.num * item.price}}</p>
+        </label>
+      </div>
+    </div>
+
+    <h1 id="customer--total">Total</h1>
+
+    <p ng-model="total" class="customer--item__total">${{total}}</p>
   </ion-content>
 </ion-view>

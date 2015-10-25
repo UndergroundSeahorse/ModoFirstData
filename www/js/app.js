@@ -9,7 +9,9 @@
 var ref = new Firebase('https://nopay.firebaseio.com/');
 
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'braintree-angular'])
+
+.constant('clientTokenPath', 'http://10.101.1.179:1212/client_token')
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -53,7 +55,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     url: '/home',
     views: {
       'customer-home': {
-        templateUrl: 'templates/customer-home.html'
+        templateUrl: 'templates/customer-home.html',
+        controller: 'CustHomeCtrl'
       }
     }
   })
@@ -62,7 +65,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     url: '/payments',
     views: {
       'customer-payments': {
-        templateUrl: 'templates/customer-payments.html'
+        templateUrl: 'templates/customer-payments.html',
+        controller: 'CustPayCtrl'
       }
     }
   })
@@ -77,36 +81,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     url: '/home',
     views: {
       'restaurant-home': {
-        templateUrl: 'templates/restaurant-home.html'
+        templateUrl: 'templates/restaurant-home.html',
+        controller: 'RestHomeCtrl'
       }
     }
   })
 
-  .state('restaurant.payments', {
-    url: '/payments',
-    views: {
-      'restaurant-payments': {
-        templateUrl: 'templates/restaurant-payments.html'
-      }
-    }
-  })
-
-  .state('restaurant.customers', {
-    url: '/customers',
-    views: {
-      'restaurant-customers': {
-        templateUrl: 'templates/restaurant-customers.html'
-      }
-    }
-  })
-
-  .state('restaurant.customer-detail', {
+  .state('customerdetail', {
     url: '/customers/:customerId',
-    views: {
-      'restaurant-customer': {
-        templateUrl: 'templates/customer-detail.html'
-      }
-    }
+    templateUrl: 'templates/customer-detail.html',
+    controller: 'CustomerCtrl'
   });
 
   // if none of the above states are matched, use this as the fallback
