@@ -15,9 +15,11 @@ angular.module('starter', [
   'braintree-angular'
   ])
 
-.constant('clientTokenPath', 'http://10.101.1.179:1212/client_token')
+// .constant('clientTokenPath', 'http://10.101.1.179:1212/client_token')
+.constant('clientTokenPath', 'http://5703b7e7.ngrok.io:1212/client_token')
 
-.run(function($ionicPlatform, $rootScope, $http, $cordovaBeacon, Beacons, $log, User) {
+.run(function($ionicPlatform, $rootScope, $http, $cordovaBeacon, $log, User) {
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -31,51 +33,76 @@ angular.module('starter', [
       StatusBar.styleLightContent();
     }
 
+    // $rootScope.searchBeacons = function() {
+    // 
+      // search for beacon
+      $cordovaBeacon.requestWhenInUseAuthorization();
+      $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"));
+    // }
 
+    $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
+      
+      if (pluginResult.beacons.length > 0) {
+
+        var payload = {
+          beacons: pluginResult.beacons,
+          user: User
+        };
+        
+        $http.post('http://5703b7e7.ngrok.io/parseBeaconData', payload);
+        $cordovaBeacon.stopRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"));
+
+      }
+    });
 
     // Look for beacons
-    $cordovaBeacon.requestWhenInUseAuthorization();
+    // $cordovaBeacon.requestWhenInUseAuthorization();
  
-    $rootScope.$on("$cordovaBeacon:didStartMonitoringForRegion", function(event, pluginResult) {  
-      // store beacons on client?
-      Beacons.clearBeacons();
-      var uniqueBeaconKey;
-      for(var i = 0; i < pluginResult.beacons.length; i++) {
-          uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
-          Beacons.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
-      }
+    // $rootScope.$on("$cordovaBeacon:didStartMonitoringForRegion", function(event, pluginResult) {  
+    //   // store beacons on client?
+    //   Beacons.clearBeacons();
+    //   var uniqueBeaconKey;
+    //   for(var i = 0; i < pluginResult.beacons.length; i++) {
+    //       uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
+    //       Beacons.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
+    //   }
 
-      var payload = {
-        beacons: pluginResult.beacons,
-        user: User
-      };
+    //   var payload = {
+    //     beacons: pluginResult.beacons,
+    //     user: User
+    //   };
 
-      // send beacon list to server
-      $http.post('http://10.101.1.179:1212/parseBeaconData', payload)
-        .then(function(resp) {
-          // callback for success
-        },
-        function(err) {
-          // callback for error 
-          console.error("there was an error sending the data", err);
-        });
-      $rootScope.$apply();
-    });
+    //   console.log('inside event');
+
+    //   // send beacon list to server
+    //   $http.post('http://10.101.1.179:1212/parseBeaconData', payload)
+    //     .then(function(resp) {
+    //       // callback for success
+    //     },
+    //     function(err) {
+    //       // callback for error 
+    //       console.error("there was an error sending the data", err);
+    //     });
+    //   $rootScope.$apply();
+    // });
  
 
-    // start by ranging beacons
-    $cordovaBeacon.startMonitoringForRegion(Beacons.getTargetBeacon());
-    // mock data
-    $rootScope.$broadcast('$cordovaBeacon:didStartMonitoringForRegion', 
-    {beacons: [{
-        "minor":4,
-        "rssi":-71,
-        "major":0,
-        "proximity":"ProximityFar",
-        "accuracy":1.42,
-        "uuid":"61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"
-      }]
-    });
+    // console.log('OUTSIDE event');
+
+
+    // // start by ranging beacons
+    // $cordovaBeacon.startMonitoringForRegion(Beacons.getTargetBeacon());
+    // // mock data
+    // // $rootScope.$broadcast('$cordovaBeacon:didStartMonitoringForRegion', 
+    // // {beacons: [{
+    // //     "minor":4,
+    // //     "rssi":-71,
+    // //     "major":0,
+    // //     "proximity":"ProximityFar",
+    // //     "accuracy":1.42,
+    // //     "uuid":"61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"
+    // //   }]
+    // // });
 
   });
 })
@@ -142,6 +169,12 @@ angular.module('starter', [
     url: '/customers/:customerId',
     templateUrl: 'templates/customer-detail.html',
     controller: 'CustomerCtrl'
+  })
+
+  .state('monitor', {
+    url: '/monitor',
+    templateUrl: 'templates/monitor.html',
+    controller: 'Monitor'
   });
 
   // if none of the above states are matched, use this as the fallback
