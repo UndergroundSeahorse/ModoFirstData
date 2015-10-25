@@ -56,7 +56,8 @@ angular.module('starter.services', [])
   var targetBeacon;
 
   $ionicPlatform.ready(function() {
-    targetBeacon = $cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F", 0, 4);
+    targetBeacon = $cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F", 0, 1);
+    // targetBeacon = $cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F", 0, 4);
   });
 
   return {
@@ -74,7 +75,6 @@ angular.module('starter.services', [])
 
 .factory('User', function() {
   var user = {};
-
   return {
     set: set,
     get: get

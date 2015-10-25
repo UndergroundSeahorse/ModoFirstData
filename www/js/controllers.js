@@ -113,7 +113,15 @@ angular.module('starter.controllers', [])
   });
 })
 
-.controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, User, $state, $ionicLoading) {
+.controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, $http, $rootScope, $ionicPlatform, $cordovaBeacon, User, $state, $timeout, $ionicLoading) {
+  // $ionicPlatform.ready(function () {
+    // Trevor.doBeacon();
+  // });
+
+  // $rootScope.searchBeacons();
+  // $cordovaBeacon.requestWhenInUseAuthorization();
+  // $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"));
+
   $scope.customerId = $stateParams.customerId;
   $scope.name = "Customer";
   var restaurant = {
@@ -187,6 +195,68 @@ angular.module('starter.controllers', [])
       }
     }
   }
+  // activate();
+
+  // function activate () {
+
+  //   // begin checking for beacons
+
+  //   $scope.beacons = {};
+
+  //   // $scope.stringified = '';
+
+  //   $scope.startRange = function() {
+  //     $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"));
+  //   };
+
+  //   $scope.throttleHttp = function(payload) {
+  //     $http.post('http://5703b7e7.ngrok.io/parseBeaconData', payload);
+  //     // $cordovaBeacon.stopRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"));
+  //     // $timeout($scope.startRange, 3000);
+  //   };
+
+  //   // $ionicPlatform.ready(function() {
+
+  //     $cordovaBeacon.requestWhenInUseAuthorization();
+  //     $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
+        
+  //       var uniqueBeaconKey;
+  //       for(var i = 0; i < pluginResult.beacons.length; i++) {
+  //         uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
+  //         $scope.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
+  //       }
+
+  //       var payload = {
+  //         beacons: pluginResult.beacons,
+  //         user: User
+  //       };
+
+  //       // alert(JSON.stringify(pluginResult.beacons));
+  //       $scope.throttleHttp(payload);
+  //       console.log('inside event');
+  //       // send beacon list to server
+  //       // $http.post('http://localhost:1212/parseBeaconData', payload);
+  //         // .then(function(resp) {
+  //         //   // callback for success
+  //         // },
+  //         // function(err) {
+  //         //   // callback for error 
+  //         //   console.error("there was an error sending the data", err);
+  //         // });
+  //       $scope.$apply();
+  //     });
+
+  //     $scope.startRange();
+
+  //     // $scope.refresh = function() {
+  //     //   alert(JSON.stringify(pluginResult.beacons));
+  //     //   $scope.stringified = JSON.stringify(pluginResult.beacons);
+  //     // };
+
+  //   // });
+  // }
+
+
 })
 
 .controller('SplashCtrl', function($scope, $state, User) {
@@ -229,4 +299,64 @@ angular.module('starter.controllers', [])
       });
     }
   }
+})
+
+
+
+.controller('Monitor', function($scope, $http, $rootScope, $ionicPlatform, $cordovaBeacon, User, $state, $timeout) {
+  // $scope.beacons = {};
+
+  // $scope.stringified = '';
+
+  // $scope.startRange = function() {
+  //   $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"));
+  // };
+
+  // $scope.throttleHttp = function(payload) {
+  //   $http.post('http://5703b7e7.ngrok.io/parseBeaconData', payload);
+  //   $cordovaBeacon.stopRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"));
+  //   $timeout($scope.startRange, 3000);
+  // };
+
+  // $ionicPlatform.ready(function() {
+
+  //   $cordovaBeacon.requestWhenInUseAuthorization();
+  //   console.log('inside ionic ready');
+  //   $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
+  //     console.log('inside $rootscope apply');
+      
+  //     var uniqueBeaconKey;
+  //     for(var i = 0; i < pluginResult.beacons.length; i++) {
+  //       uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
+  //       $scope.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
+  //     }
+
+  //     var payload = {
+  //       beacons: pluginResult.beacons,
+  //       user: User
+  //     };
+
+  //     // alert(JSON.stringify(pluginResult.beacons));
+  //     $scope.throttleHttp(payload);
+  //     console.log('inside event');
+  //     // send beacon list to server
+  //     // $http.post('http://localhost:1212/parseBeaconData', payload);
+  //       // .then(function(resp) {
+  //       //   // callback for success
+  //       // },
+  //       // function(err) {
+  //       //   // callback for error 
+  //       //   console.error("there was an error sending the data", err);
+  //       // });
+  //     $scope.$apply();
+  //   });
+
+  //   $scope.startRange();
+
+  //   // $scope.refresh = function() {
+  //   //   alert(JSON.stringify(pluginResult.beacons));
+  //   //   $scope.stringified = JSON.stringify(pluginResult.beacons);
+  //   // };
+
+  // });
 });
