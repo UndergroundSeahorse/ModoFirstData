@@ -66,6 +66,12 @@ html {
  * SPLASH PAGE
  */
 
+#logo {
+  margin: 20px auto;
+  display: block;
+  width: 100px;
+}
+
 #splash {
   background-color: rgba(90, 167, 183, 0.2);
 }
@@ -102,7 +108,7 @@ html {
 
 #splash--h1 {
   font-size: 3rem;
-  margin: 50px 0;
+  margin: 50px 0 0 0;
   text-align: center;
   font-variant: small-caps;
   font-weight: 100;
