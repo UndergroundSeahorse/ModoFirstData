@@ -1,8 +1,11 @@
-<ion-view view-title="Home">
+<ion-view view-title="Customers">
   <ion-content class="padding">
-    <div ng-repeat="customer in customers" ui-sref="customerdetail({customerId: customer.uid})">
-      <div class="item">
-        <p class="item--grid__name">{{customer.name}}<span class="ion-chevron-right left--arrow"></span></p>
+    <div class="padding">
+      Here is a list of customers in your store.
+    </div>
+    <div class="list">
+      <div class="item" ng-repeat="customer in customers" ui-sref="customerdetail({customerId: customer.user.userId})">
+        <p class="item--grid__name">{{customer.user.name}}<span class="ion-chevron-right left--arrow"></span></p>
       </div>
     </div>
   </ion-content>

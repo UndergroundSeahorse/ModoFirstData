@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
@@ -64,7 +66,7 @@ angular.module('starter.controllers', [])
         expirationDate: $scope.creditCard.expirationDate.month + "/" + $scope.creditCard.expirationDate.year.slice(2)
       }, function (err, nonce) {
         if(err) {
-          console.log('error: ', err);
+          throw new Error(err);
         } else {
           ref.child('user').child(User.user.uid).set(nonce);
           console.log('nonce: ', nonce);
@@ -72,13 +74,24 @@ angular.module('starter.controllers', [])
         // - Send nonce to your server (e.g. to make a transaction)
       });
     }
-  };
+  }
   startup();
 })
 
-.controller('RestHomeCtrl', function($scope, User, $ionicLoading){
-  console.log('Initialized RestHomeCtrl');
-  $scope.customers = [{name: "Alex", uid: "87775f0f-5a53-4c53-9713-15a8b40d2e9a"}, {name: "Trevor", uid: "113c6d26-6889-4af1-8afd-50241cebbf35"}, {name: "Kenneth", uid: "5b13ea48-055d-428a-b801-16ed3183d015"}];
+.controller('RestHomeCtrl', function($scope){
+
+  $scope.customers = [];
+
+  // Keep the customers up to date with Firebase
+  ref.child('customers').on('value', function(snapshot) {
+    var customers = [];
+    var obj = snapshot.val();
+    for (var key in obj) {
+      customers.push(obj[key]);
+    }
+    $scope.customers = customers;
+    $scope.$apply();
+  });
 })
 
 .controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, User, $state, $ionicLoading) {
