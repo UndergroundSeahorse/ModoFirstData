@@ -1,5 +1,11 @@
 <ion-view view-title="Home">
   <ion-content class="padding">
-    <h1>Customer Home</h1>
+    <h1 class="home--restaurant__name">{{restaurant.name}}</h1>
+    <div ng-repeat="item in restaurant.menu">
+      <div class="item--grid__50">
+        <p class="item--grid__name">{{item.name}}</p>
+        <p class="item--grid__price">{{item.price}}</p>
+      </div>
+    </div>
   </ion-content>
 </ion-view>
