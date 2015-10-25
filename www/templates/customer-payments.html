@@ -1,9 +1,23 @@
 <ion-view view-title="Payments">
   <ion-content class="padding">
-    <div>
-      <braintree-paypal></braintree-paypal>
+      <!-- <braintree-paypal></braintree-paypal> -->
 
-      <input
+      <form id="checkout--form" ng-submit="createCC();" method="post">
+        <input data-braintree-name="number" placeholder="4111111111111111" ng-model="creditCard.number">
+        <input data-braintree-name="cvv" placeholder="cvv:100" ng-model="creditCard.cvv">
+
+        <!-- you can also split expiration date into two fields -->
+        <input data-braintree-name="expiration_month" placeholder="month:10" ng-model="creditCard.expirationDate.month">
+        <input data-braintree-name="expiration_year" placeholder="yr:2020" ng-model="creditCard.expirationDate.year">
+
+        <input data-braintree-name="postal_code" placeholder="zip:94107" ng-model="creditCard.zip">
+        <input data-braintree-name="cardholder_name" placeholder="name:John Smith" ng-model="creditCard.name">
+
+        <input type="submit" id="submit" value="Pay">
+      </form>
+
+
+     <!--  <input
         ng-model="creditCard.number"
         placeholder="4111111111111111"
         />
@@ -19,6 +33,6 @@
         ng-click="createCC()"
         />
 
-    </div>
+    </div> -->
   </ion-content>
 </ion-view>

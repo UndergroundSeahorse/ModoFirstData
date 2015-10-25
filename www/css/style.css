@@ -213,3 +213,28 @@ html {
   right: 30px;
   position: absolute;
 }
+
+#checkout--form input {
+  margin-top: 20px;
+  width: 100%;
+}
+
+#submit {
+  padding: 10px;
+  background-color: rgba(90, 167, 183, 0.5);
+}
+
+#checkout {
+  margin-top: 100px;
+  font-size: 3rem;
+  background-color: rgba(90, 167, 183, 0.5);
+  padding: 10px;
+  text-align: center;
+  border: 1px solid rgba(90,167,183,1);
+}
+
+.quantity {
+  float: left;
+  margin-top: 10px;
+  margin-right: 20px;
+}
