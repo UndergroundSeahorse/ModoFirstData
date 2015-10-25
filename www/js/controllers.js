@@ -35,17 +35,14 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('CustPayCtrl', function($scope, $braintree) {
+.controller('CustPayCtrl', function($scope, $braintree, User) {
   console.log('Initialized Cust Pay Ctrl');
 
   $scope.createCC = createCC;
-  $scope.creditCard = {};
-  $scope.changeCC = changeCC;
-
   var client;
   $scope.creditCard = {
     number: '',
-    expirationDate: ''
+    expirationDate: {}
   };
 
   var startup = function() {
@@ -56,37 +53,21 @@ angular.module('starter.controllers', [])
     });
   };
 
-  function changeCC() {
-    var ex = $scope.creditCard.expirationDate;
-    if(ex.length === 3) {
-      var temp = ex;
-      ex = 0 + ex[0] + "/" + ex[1] + ex[2];
-      console.log(ex);
-    } else if(ex.length === 4) {
-      ex = ex[0] + ex[1] + "/" + ex[2] + ex[3];
-      console.log(ex);
-    } else if(ex.length === 5) {
-      console.log('OK');
-    } else {
-      console.log('ERROR');
-    }
-  };
 
   function createCC() {
     // - Validate $scope.creditCard
     // - Make sure client is ready to use
-    changeCC();
-    if($scope.creditCard.number.length === 16 && $scope.creditCard.expirationDate.length === 5) {
+    console.log($scope.creditCard.expirationDate.month + "/" + $scope.creditCard.expirationDate.year.slice(2));
+    if($scope.creditCard.number.length === 16 && $scope.creditCard.expirationDate && $scope.creditCard.name && $scope.creditCard.zip && $scope.creditCard.cvv) {
       client.tokenizeCard({
         number: $scope.creditCard.number,
-        expirationDate: $scope.creditCard.expirationDate
+        expirationDate: $scope.creditCard.expirationDate.month + "/" + $scope.creditCard.expirationDate.year.slice(2)
       }, function (err, nonce) {
         if(err) {
           console.log('error: ', err);
         } else {
+          ref.child('user').child(User.user.uid).set(nonce);
           console.log('nonce: ', nonce);
-          console.log($scope.creditCard.number);
-          console.log($scope.creditCard.expirationDate)
         }
         // - Send nonce to your server (e.g. to make a transaction)
       });
@@ -95,12 +76,12 @@ angular.module('starter.controllers', [])
   startup();
 })
 
-.controller('RestHomeCtrl', function($scope){
+.controller('RestHomeCtrl', function($scope, User){
   console.log('Initialized RestHomeCtrl');
   $scope.customers = [{name: "Alex", uid: "alexuid"}, {name: "Trevor", uid: "trevoruid"}, {name: "Kenneth", uid: "kennethuid"}];
 })
 
-.controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory) {
+.controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, User) {
   $scope.customerId = $stateParams.customerId;
   $scope.name = "Alex";
   $scope.restaurant = {
@@ -110,6 +91,32 @@ angular.module('starter.controllers', [])
   $scope.changeTotal = changeTotal;
   $scope.myGoBack = myGoBack;
   $scope.total = 0;
+  $scope.sendBill = sendBill;
+
+  function sendBill(total) {
+    console.log(total);
+
+    var nonce;
+    ref.child('user').on('value', function(snapshot) {
+      console.log('snapshot', snapshot.val());
+      var obj = {};
+      for(var prop in snapshot.val()) {
+        obj[prop] = prop;
+      }
+      nonce = obj[User.user.uid];
+      console.log(nonce);
+    }, function(err) {
+      console.log(err)
+    });
+
+    // put on server
+    // gateway.transaction.sale({
+    //   amount: total,
+    //   merchantAccountId: "yourMerchantAccount",
+    //   paymentMethodNonce: nonceFromTheClient
+    // }, function (err, result) {
+    // });
+  }
 
   function myGoBack() {
     $ionicHistory.goBack();
@@ -125,7 +132,7 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('SplashCtrl', function($scope, $state) {
+.controller('SplashCtrl', function($scope, $state, User) {
   $scope.buttonChoice = "customer";
   $scope.userType = userType;
   $scope.signIn = signIn;
@@ -158,7 +165,8 @@ angular.module('starter.controllers', [])
         if (error) {
           console.log("Login Failed!", error);
         } else {
-          console.log("Authenticated successfully with payload:", authData);
+          User.setUser(authData);
+          console.log(User.user);
           $scope.userType();
         }
       });

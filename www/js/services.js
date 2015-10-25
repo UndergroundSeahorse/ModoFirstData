@@ -70,10 +70,17 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('User', function(Beacons) {
+.factory('User', function() {
+  var user = {};
+  var setUser = function(obj) {
+    this.user = {
+      email: obj.password.email,
+      uid: obj.uid,
+      token: obj.token
+    }
+  };
   return {
-    // mocked
-    userId: 'klfjkldjadaioewia',
-    name: "Alex leo",
+    setUser: setUser,
+    user: user
   };
 });
