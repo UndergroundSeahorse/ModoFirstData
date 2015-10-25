@@ -113,7 +113,7 @@ angular.module('starter.controllers', [])
   });
 })
 
-.controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, $http, $rootScope, $ionicPlatform, $cordovaBeacon, User, $state, $timeout) {
+.controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, $http, $rootScope, $ionicPlatform, $cordovaBeacon, User, $state, $timeout, $ionicLoading) {
   // $ionicPlatform.ready(function () {
     // Trevor.doBeacon();
   // });
