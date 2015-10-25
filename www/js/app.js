@@ -46,7 +46,7 @@ angular.module('starter', [
 
         var payload = {
           beacons: pluginResult.beacons,
-          user: User
+          user: User.get()
         };
         
         $http.post('http://5703b7e7.ngrok.io/parseBeaconData', payload);
