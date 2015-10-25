@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
@@ -27,11 +29,30 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('CustHomeCtrl', function($scope) {
-  console.log('Initialized Home Ctrl');
-  $scope.restaurant = {
-    name: "Test Restaurant",
-    menu: [{name: "Item1", price: "$1.00"}, {name: "Item2", price: "$2.00"}, {name: "Item3", price: "$3.00"}, {name: "Item4", price: "$4.00"}, {name: "Item5", price: "$5.00"}, {name: "Item6", price: "$6.00"}]
+.controller('CustHomeCtrl', function($scope, $http, User) {
+  var restaurant = {
+    name: 'Tequeria Cancun',
+    menu: [
+    {name: 'Encheladas', price: 9.90, checked: false, num: 0},
+    {name: 'Super Burrito', price: 11.90, checked: false, num: 0},
+    {name: 'Quesadillas', price: 8.90, checked: false, num: 0},
+    {name: 'Nachos', price: 6.00, checked: false, num: 0},
+    {name: 'Macho Mucho Tacos', price: 12.00, checked: false, num: 0},
+    {name: 'California Burrito', price: 15.00, checked: false, num: 0}
+    ]
+  };
+
+  $scope.sendMockBeaconData = function () {
+    var payload = {
+      user: User.get(),
+      beaconData: {
+        major: 1,
+        minor: 0
+      }
+    };
+
+    $http.post('http://5703b7e7.ngrok.io/parseBeaconData', payload);
+    $scope.restaurant = restaurant;
   };
 })
 
@@ -64,7 +85,7 @@ angular.module('starter.controllers', [])
         expirationDate: $scope.creditCard.expirationDate.month + "/" + $scope.creditCard.expirationDate.year.slice(2)
       }, function (err, nonce) {
         if(err) {
-          console.log('error: ', err);
+          throw new Error(err);
         } else {
           ref.child('user').child(User.user.uid).set(nonce);
           console.log('nonce: ', nonce);
@@ -72,41 +93,65 @@ angular.module('starter.controllers', [])
         // - Send nonce to your server (e.g. to make a transaction)
       });
     }
-  };
+  }
   startup();
 })
 
-.controller('RestHomeCtrl', function($scope, User, $ionicLoading){
-  console.log('Initialized RestHomeCtrl');
-  $scope.customers = [{name: "Alex", uid: "87775f0f-5a53-4c53-9713-15a8b40d2e9a"}, {name: "Trevor", uid: "113c6d26-6889-4af1-8afd-50241cebbf35"}, {name: "Kenneth", uid: "5b13ea48-055d-428a-b801-16ed3183d015"}];
+.controller('RestHomeCtrl', function($scope){
+
+  $scope.customers = [];
+
+  // Keep the customers up to date with Firebase
+  ref.child('customers').on('value', function(snapshot) {
+    var customers = [];
+    var obj = snapshot.val();
+    for (var key in obj) {
+      customers.push(obj[key]);
+    }
+    $scope.customers = customers;
+    $scope.$apply();
+  });
 })
 
 .controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, User, $state, $ionicLoading) {
   $scope.customerId = $stateParams.customerId;
   $scope.name = "Customer";
+  var restaurant = {
+    name: 'Tequeria Cancun',
+    menu: [
+    {name: 'Encheladas', price: 9.90, checked: false, num: 0},
+    {name: 'Super Burrito', price: 11.90, checked: false, num: 0},
+    {name: 'Quesadillas', price: 8.90, checked: false, num: 0},
+    {name: 'Nachos', price: 6.00, checked: false, num: 0},
+    {name: 'Macho Mucho Tacos', price: 12.00, checked: false, num: 0},
+    {name: 'California Burrito', price: 15.00, checked: false, num: 0}
+    ]
+  };
+
   $scope.restaurant = {
     name: "Test Restaurant",
     menu: [{name: "Item1", price: 1.00, checked: false, num: 0}, {name: "Item2", price: 2.50, checked: false, num: 0}, {name: "Item3", price: 3.00, checked: false, num: 0}, {name: "Item4", price: 4.50, checked: false, num: 0}, {name: "Item5", price: 5.00, checked: false, num: 0}, {name: "Item6", price: 6.00, checked: false, num: 0}]
   };
+
   $scope.changeTotal = changeTotal;
   $scope.myGoBack = myGoBack;
   $scope.total = 0;
   $scope.sendBill = sendBill;
 
   function sendBill(total) {
-    console.log(total);
 
     var nonce;
+
     ref.child('user').on('value', function(snapshot) {
       nonce = snapshot.val()[$stateParams.customerId];
       console.log(nonce);
     }, function(err) {
-      console.log(err)
+      throw new Error(err);
     });
 
     $scope.show = function() {
       $ionicLoading.show({
-        template: 'Bill was charged for $' + total
+        template: 'Charged $' + total
       });
     };
 
@@ -132,7 +177,7 @@ angular.module('starter.controllers', [])
 
   function myGoBack() {
     $ionicHistory.goBack();
-  };
+  }
 
   function changeTotal() {
     $scope.total = 0;
@@ -161,12 +206,12 @@ angular.module('starter.controllers', [])
   }
 
   function userType(){
-    if($scope.buttonChoice === "customer") {
+    if($scope.buttonChoice === 'customer') {
       $state.go('customer.home');
     } else {
       $state.go('restaurant.home');
     }
-  };
+  }
 
   function signIn() {
     if($scope.userInfo.email && $scope.userInfo.password) {
@@ -175,13 +220,13 @@ angular.module('starter.controllers', [])
         password : $scope.userInfo.password
       }, function(error, authData) {
         if (error) {
-          console.log("Login Failed!", error);
+          throw new Error(error);
         } else {
-          User.setUser(authData);
-          console.log(User.user);
+          User.set(authData);
+          console.log(User.get());
           $scope.userType();
         }
       });
-    };
-  };
+    }
+  }
 });
