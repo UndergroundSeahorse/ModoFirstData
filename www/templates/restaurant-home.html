@@ -5,7 +5,7 @@
     </div>
     <div class="list">
       <div class="item" ng-repeat="customer in customers" ui-sref="customerdetail({customerId: customer.user.userId})">
-        <p class="item--grid__name">{{customer.user.name}}<span class="ion-chevron-right left--arrow"></span></p>
+        <p class="item--grid__name">{{customer.user.email}}<span class="ion-chevron-right left--arrow"></span></p>
       </div>
     </div>
   </ion-content>

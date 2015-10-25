@@ -29,11 +29,30 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('CustHomeCtrl', function($scope) {
-  console.log('Initialized Home Ctrl');
-  $scope.restaurant = {
-    name: "Test Restaurant",
-    menu: [{name: "Item1", price: "$1.00"}, {name: "Item2", price: "$2.00"}, {name: "Item3", price: "$3.00"}, {name: "Item4", price: "$4.00"}, {name: "Item5", price: "$5.00"}, {name: "Item6", price: "$6.00"}]
+.controller('CustHomeCtrl', function($scope, $http, User) {
+  var restaurant = {
+    name: 'Tequeria Cancun',
+    menu: [
+    {name: 'Encheladas', price: 9.90, checked: false, num: 0},
+    {name: 'Super Burrito', price: 11.90, checked: false, num: 0},
+    {name: 'Quesadillas', price: 8.90, checked: false, num: 0},
+    {name: 'Nachos', price: 6.00, checked: false, num: 0},
+    {name: 'Macho Mucho Tacos', price: 12.00, checked: false, num: 0},
+    {name: 'California Burrito', price: 15.00, checked: false, num: 0}
+    ]
+  };
+
+  $scope.sendMockBeaconData = function () {
+    var payload = {
+      user: User.get(),
+      beaconData: {
+        major: 1,
+        minor: 0
+      }
+    };
+
+    $http.post('http://5703b7e7.ngrok.io/parseBeaconData', payload);
+    $scope.restaurant = restaurant;
   };
 })
 
@@ -97,29 +116,42 @@ angular.module('starter.controllers', [])
 .controller('CustomerCtrl', function($scope, $stateParams, $ionicHistory, User, $state, $ionicLoading) {
   $scope.customerId = $stateParams.customerId;
   $scope.name = "Customer";
+  var restaurant = {
+    name: 'Tequeria Cancun',
+    menu: [
+    {name: 'Encheladas', price: 9.90, checked: false, num: 0},
+    {name: 'Super Burrito', price: 11.90, checked: false, num: 0},
+    {name: 'Quesadillas', price: 8.90, checked: false, num: 0},
+    {name: 'Nachos', price: 6.00, checked: false, num: 0},
+    {name: 'Macho Mucho Tacos', price: 12.00, checked: false, num: 0},
+    {name: 'California Burrito', price: 15.00, checked: false, num: 0}
+    ]
+  };
+
   $scope.restaurant = {
     name: "Test Restaurant",
     menu: [{name: "Item1", price: 1.00, checked: false, num: 0}, {name: "Item2", price: 2.50, checked: false, num: 0}, {name: "Item3", price: 3.00, checked: false, num: 0}, {name: "Item4", price: 4.50, checked: false, num: 0}, {name: "Item5", price: 5.00, checked: false, num: 0}, {name: "Item6", price: 6.00, checked: false, num: 0}]
   };
+
   $scope.changeTotal = changeTotal;
   $scope.myGoBack = myGoBack;
   $scope.total = 0;
   $scope.sendBill = sendBill;
 
   function sendBill(total) {
-    console.log(total);
 
     var nonce;
+
     ref.child('user').on('value', function(snapshot) {
       nonce = snapshot.val()[$stateParams.customerId];
       console.log(nonce);
     }, function(err) {
-      console.log(err)
+      throw new Error(err);
     });
 
     $scope.show = function() {
       $ionicLoading.show({
-        template: 'Bill was charged for $' + total
+        template: 'Charged $' + total
       });
     };
 
@@ -145,7 +177,7 @@ angular.module('starter.controllers', [])
 
   function myGoBack() {
     $ionicHistory.goBack();
-  };
+  }
 
   function changeTotal() {
     $scope.total = 0;
@@ -174,12 +206,12 @@ angular.module('starter.controllers', [])
   }
 
   function userType(){
-    if($scope.buttonChoice === "customer") {
+    if($scope.buttonChoice === 'customer') {
       $state.go('customer.home');
     } else {
       $state.go('restaurant.home');
     }
-  };
+  }
 
   function signIn() {
     if($scope.userInfo.email && $scope.userInfo.password) {
@@ -188,13 +220,13 @@ angular.module('starter.controllers', [])
         password : $scope.userInfo.password
       }, function(error, authData) {
         if (error) {
-          console.log("Login Failed!", error);
+          throw new Error(error);
         } else {
-          User.setUser(authData);
-          console.log(User.user);
+          User.set(authData);
+          console.log(User.get());
           $scope.userType();
         }
       });
-    };
-  };
+    }
+  }
 });

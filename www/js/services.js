@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('starter.services', [])
 
 .factory('Chats', function() {
@@ -72,15 +74,19 @@ angular.module('starter.services', [])
 
 .factory('User', function() {
   var user = {};
-  var setUser = function(obj) {
-    this.user = {
-      email: obj.password.email,
-      uid: obj.uid,
-      token: obj.token
-    }
-  };
+
   return {
-    setUser: setUser,
-    user: user
+    set: set,
+    get: get
   };
+
+  function get () {
+    return user;
+  }
+
+  function set (obj) {
+    user.email = obj.password.email;
+    user.uid = obj.uid;
+    user.token = obj.token;
+  }
 });
