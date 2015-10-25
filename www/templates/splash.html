@@ -2,8 +2,48 @@
   <ion-content class="padding">
     <p>This is the splash page for the entire app. User has the choice to choose customer or restaurant.</p>
 
-    <button class="button-positive" ui-sref="customer.home">Customer</button>
-    <button class="button-positive" ui-sref="restaurant.home">Restaurant</button>
+    <label class="item item-input">
+      <span class="input-label">Email</span>
+      <input type="email" ng-model="userInfo.email" placeholder="email">
+    </label>
+
+    <label class="item item-input">
+      <span class="input-label">Password</span>
+      <input type="password" ng-model="userInfo.password" placeholder="password">
+    </label>
+
+
+
+
+    <div class="list">
+      <label class="item item-radio">
+        <input type="radio" name="register__type" ng-click="buttonChoiceCu();" value="customer">
+        <div class="item-content">
+          Customer
+        </div>
+        <i class="radio-icon ion-checkmark"></i>
+      </label>
+      <label class="item item-radio">
+        <input type="radio" name="register__type" ng-click="buttonChoiceRe();" value="restaurant">
+        <div class="item-content">
+          Restaurant
+        </div>
+        <i class="radio-icon ion-checkmark"></i>
+      </label>
+    </div>
+
+    <button class="button-positive" ng-click="signIn();">Next</button>
+
+    <div class="list" style="text-align:center">
+      <button ng-click="modal.show()" class="button button-small button-outline icon-left ion-person-add button-positive" id="create--user">
+          Signup
+      </button>
+    </div>
+
+
+
   </ion-content>
 </ion-view>
 
+<!-- ui-sref="customer.home"
+ui-sref="restaurant.home" -->
