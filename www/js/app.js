@@ -5,15 +5,19 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-
 var ref = new Firebase('https://nopay.firebaseio.com/');
 
-
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'braintree-angular'])
+angular.module('starter', [
+  'ionic', 
+  'starter.controllers', 
+  'starter.services',
+  'ngCordovaBeacon',
+  'braintree-angular'
+  ])
 
 .constant('clientTokenPath', 'http://10.101.1.179:1212/client_token')
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $http, $cordovaBeacon, Beacons, $log, User) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -26,6 +30,53 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
+
+
+
+    // Look for beacons
+    $cordovaBeacon.requestWhenInUseAuthorization();
+ 
+    $rootScope.$on("$cordovaBeacon:didStartMonitoringForRegion", function(event, pluginResult) {  
+      // store beacons on client?
+      Beacons.clearBeacons();
+      var uniqueBeaconKey;
+      for(var i = 0; i < pluginResult.beacons.length; i++) {
+          uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
+          Beacons.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
+      }
+
+      var payload = {
+        beacons: pluginResult.beacons,
+        user: User
+      };
+
+      // send beacon list to server
+      $http.post('http://10.101.1.179:1212/parseBeaconData', payload)
+        .then(function(resp) {
+          // callback for success
+        },
+        function(err) {
+          // callback for error 
+          console.error("there was an error sending the data", err);
+        });
+      $rootScope.$apply();
+    });
+ 
+
+    // start by ranging beacons
+    $cordovaBeacon.startMonitoringForRegion(Beacons.getTargetBeacon());
+    // mock data
+    $rootScope.$broadcast('$cordovaBeacon:didStartMonitoringForRegion', 
+    {beacons: [{
+        "minor":4,
+        "rssi":-71,
+        "major":0,
+        "proximity":"ProximityFar",
+        "accuracy":1.42,
+        "uuid":"61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F"
+      }]
+    });
+
   });
 })
 

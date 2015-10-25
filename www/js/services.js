@@ -47,4 +47,33 @@ angular.module('starter.services', [])
       return null;
     }
   };
+})
+
+.factory('Beacons', function($ionicPlatform, $cordovaBeacon) {
+
+  var targetBeacon;
+
+  $ionicPlatform.ready(function() {
+    targetBeacon = $cordovaBeacon.createBeaconRegion("MODO", "61482E47-FBE1-9D72-0F0F-0F0F0F0F0F0F", 0, 4);
+  });
+
+  return {
+    beacons: [],
+
+    getTargetBeacon: function() {
+      return targetBeacon;
+    },
+
+    clearBeacons: function() {
+      this.beacons = [];
+    }
+  };
+})
+
+.factory('User', function(Beacons) {
+  return {
+    // mocked
+    userId: 'klfjkldjadaioewia',
+    name: "Alex leo",
+  };
 });
